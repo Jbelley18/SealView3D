@@ -41,7 +41,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 26,
+				"line" : 24,
 				"parent" : 0
 			},
 			{
@@ -167,7 +167,7 @@
 			{
 				"command" : 5,
 				"file" : 0,
-				"line" : 23,
+				"line" : 21,
 				"parent" : 0
 			},
 			{
@@ -310,7 +310,7 @@
 				0,
 				1,
 				2,
-				3
+				4
 			]
 		}
 	],
@@ -430,21 +430,29 @@
 				0,
 				1,
 				2,
-				3
+				4
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				3,
+				5
 			]
 		},
 		{
 			"name" : "",
 			"sourceIndexes" : 
 			[
-				4
+				6
 			]
 		},
 		{
 			"name" : "CMake Rules",
 			"sourceIndexes" : 
 			[
-				5
+				7
 			]
 		}
 	],
@@ -471,21 +479,31 @@
 		},
 		{
 			"backtrace" : 1,
+			"path" : "ViewerWidget.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "MainWindow.cpp",
+			"path" : "SWCParser.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
-			"backtrace" : 0,
-			"isGenerated" : true,
-			"path" : "cmake-build-debug/3DViewer_autogen/timestamp",
+			"backtrace" : 1,
+			"path" : "SWCParser.h",
 			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "cmake-build-debug/3DViewer_autogen/timestamp.rule",
+			"path" : "cmake-build-debug/3DViewer_autogen/timestamp",
 			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "cmake-build-debug/3DViewer_autogen/timestamp.rule",
+			"sourceGroupIndex" : 3
 		}
 	],
 	"type" : "EXECUTABLE"

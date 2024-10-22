@@ -6,7 +6,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-# Set the correct Qt installation path
+# Set the correct Qt installation path (adjust this if your path is different)
 set(CMAKE_PREFIX_PATH "C:/Qt/6.8.0/mingw_64")
 
 # Find the necessary Qt components
@@ -16,16 +16,17 @@ find_package(OpenGL REQUIRED)  # Ensure OpenGL is found
 # Find Assimp
 find_package(Assimp REQUIRED)
 
-# Include Assimp headers
-include_directories(${ASSIMP_INCLUDE_DIRS})
+# Include directories
+include_directories(${ASSIMP_INCLUDE_DIRS})  # Assimp headers
+include_directories(${CMAKE_SOURCE_DIR}/lib)  # Add any custom libs in the future
 
-# Include necessary directories for the project
-include_directories(${CMAKE_SOURCE_DIR}/lib)  # For additional libs if needed in the future
-
-# Define the executable, excluding MorphIO and HDF5 for now
+# Define the executable
 add_executable(3DViewer
         main.cpp
         ViewerWidget.cpp
+        ViewerWidget.h
+        SWCParser.cpp
+        SWCParser.h
 )
 
 # Link against the necessary Qt, OpenGL, and Assimp libraries
@@ -35,10 +36,10 @@ target_link_libraries(3DViewer
         Qt6::Widgets
         Qt6::OpenGLWidgets
         OpenGL::GL
-        ${ASSIMP_LIBRARIES}  # Assimp library for STL loading
+        ${ASSIMP_LIBRARIES}  # Link Assimp for STL loading
 )
 
-# Optionally, set the output directory for the executable
+# Set the output directory for the executable
 set_target_properties(3DViewer PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )

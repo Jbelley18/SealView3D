@@ -1,14 +1,11 @@
 #include "ViewerWidget.h"
 #include <iostream>
 #include <cmath> // For std::tan
-#include <QPushButton>
-#include <QMenuBar>
-#include <QHBoxLayout>
 
 ViewerWidget::ViewerWidget(QWidget *parent)
     : QOpenGLWidget(parent), zoom(1.0f), rotationX(0.0f), rotationY(0.0f),
       isRightMousePressed(false), panOffset(0.0f, 0.0f) {
-    // Load the STL model from the given path
+    // Load the STL model from the given path by default
     loadModel("C:/Users/justi/Downloads/ArticulatedSealPup.stl");
 }
 
@@ -20,7 +17,6 @@ void ViewerWidget::initializeGL() {
 
 void ViewerWidget::resizeGL(int w, int h) {
     glViewport(0, 0, w, h);
-
     float aspectRatio = static_cast<float>(w) / h;
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -43,7 +39,6 @@ void ViewerWidget::paintGL() {
     // Set up projection matrix
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-
     float aspectRatio = static_cast<float>(width()) / height();
     float fov = 60.0f;
     float nearPlane = 0.1f;
@@ -59,16 +54,36 @@ void ViewerWidget::paintGL() {
     // Set up model-view matrix
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(panOffset.x(), panOffset.y(), -20.0f * zoom); // Adjust zoom here
+    glTranslatef(panOffset.x(), panOffset.y(), -20.0f * zoom);
     glRotatef(rotationX, 1.0f, 0.0f, 0.0f);
     glRotatef(rotationY, 0.0f, 1.0f, 0.0f);
 
-    // Draw the loaded model
-    glBegin(GL_TRIANGLES);
-    for (unsigned int i : indices) {
-        glVertex3f(vertices[i * 3], vertices[i * 3 + 1], vertices[i * 3 + 2]);
+    // Render the model or neuron based on what's loaded
+    if (isNeuronLoaded) {
+        // Draw the neuron as lines between parent and child nodes
+        glBegin(GL_LINES);
+        for (const NeuronNode& node : neuronNodes) {
+            if (node.parent != -1) {
+                NeuronNode parent = neuronNodes[node.parent - 1];
+                glVertex3f(node.x, node.y, node.z);
+                glVertex3f(parent.x, parent.y, parent.z);
+            }
+        }
+        glEnd();
+    } else {
+        // Draw the loaded STL model
+        glBegin(GL_TRIANGLES);
+        for (unsigned int i : indices) {
+            glVertex3f(vertices[i * 3], vertices[i * 3 + 1], vertices[i * 3 + 2]);
+        }
+        glEnd();
     }
-    glEnd();
+}
+
+void ViewerWidget::loadNeuron(const std::vector<NeuronNode>& nodes) {
+    neuronNodes = nodes;
+    isNeuronLoaded = true;
+    update();  // Trigger a repaint
 }
 
 void ViewerWidget::wheelEvent(QWheelEvent *event) {

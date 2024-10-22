@@ -73,9 +73,9 @@ build CMakeFiles/3DViewer.dir/ViewerWidget.cpp.obj: CXX_COMPILER__3DViewer_unsca
   OBJECT_DIR = CMakeFiles\3DViewer.dir
   OBJECT_FILE_DIR = CMakeFiles\3DViewer.dir
 
-build CMakeFiles/3DViewer.dir/MainWindow.cpp.obj: CXX_COMPILER__3DViewer_unscanned_Debug C$:/Users/justi/CLionProjects/3DViewer/MainWindow.cpp || cmake_object_order_depends_target_3DViewer
+build CMakeFiles/3DViewer.dir/SWCParser.cpp.obj: CXX_COMPILER__3DViewer_unscanned_Debug C$:/Users/justi/CLionProjects/3DViewer/SWCParser.cpp || cmake_object_order_depends_target_3DViewer
   DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
-  DEP_FILE = CMakeFiles\3DViewer.dir\MainWindow.cpp.obj.d
+  DEP_FILE = CMakeFiles\3DViewer.dir\SWCParser.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/justi/CLionProjects/3DViewer/lib -isystem "C:/Program Files (x86)/Assimp/include" -isystem C:/Users/justi/CLionProjects/3DViewer/cmake-build-debug/3DViewer_autogen/include -isystem C:/Qt/6.8.0/mingw_64/include/QtCore -isystem C:/Qt/6.8.0/mingw_64/include -isystem C:/Qt/6.8.0/mingw_64/mkspecs/win32-g++ -isystem C:/Qt/6.8.0/mingw_64/include/QtGui -isystem C:/VulkanSDK/1.3.296.0/Include -isystem C:/Qt/6.8.0/mingw_64/include/QtWidgets -isystem C:/Qt/6.8.0/mingw_64/include/QtOpenGLWidgets -isystem C:/Qt/6.8.0/mingw_64/include/QtOpenGL
   OBJECT_DIR = CMakeFiles\3DViewer.dir
@@ -89,7 +89,7 @@ build CMakeFiles/3DViewer.dir/MainWindow.cpp.obj: CXX_COMPILER__3DViewer_unscann
 #############################################
 # Link the executable bin\3DViewer.exe
 
-build bin/3DViewer.exe: CXX_EXECUTABLE_LINKER__3DViewer_Debug CMakeFiles/3DViewer.dir/3DViewer_autogen/mocs_compilation.cpp.obj CMakeFiles/3DViewer.dir/main.cpp.obj CMakeFiles/3DViewer.dir/ViewerWidget.cpp.obj CMakeFiles/3DViewer.dir/MainWindow.cpp.obj | C$:/Qt/6.8.0/mingw_64/lib/libQt6OpenGLWidgets.a C$:/Program$ Files$ (x86)/Assimp/lib/libassimp.dll.a C$:/Qt/6.8.0/mingw_64/lib/libQt6Widgets.a C$:/Qt/6.8.0/mingw_64/lib/libQt6OpenGL.a C$:/Qt/6.8.0/mingw_64/lib/libQt6Gui.a C$:/Qt/6.8.0/mingw_64/lib/libQt6Core.a C$:/Program$ Files$ (x86)/Assimp/lib/libzlibstatic.a || 3DViewer_autogen 3DViewer_autogen_timestamp_deps
+build bin/3DViewer.exe: CXX_EXECUTABLE_LINKER__3DViewer_Debug CMakeFiles/3DViewer.dir/3DViewer_autogen/mocs_compilation.cpp.obj CMakeFiles/3DViewer.dir/main.cpp.obj CMakeFiles/3DViewer.dir/ViewerWidget.cpp.obj CMakeFiles/3DViewer.dir/SWCParser.cpp.obj | C$:/Qt/6.8.0/mingw_64/lib/libQt6OpenGLWidgets.a C$:/Program$ Files$ (x86)/Assimp/lib/libassimp.dll.a C$:/Qt/6.8.0/mingw_64/lib/libQt6Widgets.a C$:/Qt/6.8.0/mingw_64/lib/libQt6OpenGL.a C$:/Qt/6.8.0/mingw_64/lib/libQt6Gui.a C$:/Qt/6.8.0/mingw_64/lib/libQt6Core.a C$:/Program$ Files$ (x86)/Assimp/lib/libzlibstatic.a || 3DViewer_autogen 3DViewer_autogen_timestamp_deps
   FLAGS = -g
   LINK_LIBRARIES = C:/Qt/6.8.0/mingw_64/lib/libQt6OpenGLWidgets.a  -lopengl32  "C:/Program Files (x86)/Assimp/lib/libassimp.dll.a"  C:/Qt/6.8.0/mingw_64/lib/libQt6Widgets.a  C:/Qt/6.8.0/mingw_64/lib/libQt6OpenGL.a  C:/Qt/6.8.0/mingw_64/lib/libQt6Gui.a  C:/Qt/6.8.0/mingw_64/lib/libQt6Core.a  -lmpr  -luserenv  -ld3d11  -ldxgi  -ldxguid  -ld3d12  "C:/Program Files (x86)/Assimp/lib/libzlibstatic.a"  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\3DViewer.dir

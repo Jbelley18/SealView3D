@@ -470,4 +470,5 @@ C:/Users/justi/CLionProjects/3DViewer/cmake-build-debug/3DViewer_autogen/EWIEGA4
   C:/Qt/6.8.0/mingw_64/include/QtWidgets/qtwidgets-config.h \
   C:/Qt/6.8.0/mingw_64/include/QtWidgets/qtwidgetsexports.h \
   C:/Qt/6.8.0/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
-  C:/Qt/6.8.0/mingw_64/include/QtWidgets/qwidget.h
+  C:/Qt/6.8.0/mingw_64/include/QtWidgets/qwidget.h \
+  C:/Users/justi/CLionProjects/3DViewer/SWCParser.h

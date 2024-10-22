@@ -506,11 +506,8 @@
 	C:/Qt/6.8.0/mingw_64/include/QtOpenGLWidgets/qopenglwidget.h \
 	C:/Qt/6.8.0/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsexports.h \
 	C:/Qt/6.8.0/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsglobal.h \
-	C:/Qt/6.8.0/mingw_64/include/QtWidgets/QMainWindow \
 	C:/Qt/6.8.0/mingw_64/include/QtWidgets/QWidget \
-	C:/Qt/6.8.0/mingw_64/include/QtWidgets/qmainwindow.h \
 	C:/Qt/6.8.0/mingw_64/include/QtWidgets/qsizepolicy.h \
-	C:/Qt/6.8.0/mingw_64/include/QtWidgets/qtabwidget.h \
 	C:/Qt/6.8.0/mingw_64/include/QtWidgets/qtwidgets-config.h \
 	C:/Qt/6.8.0/mingw_64/include/QtWidgets/qtwidgetsexports.h \
 	C:/Qt/6.8.0/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -670,8 +667,8 @@
 	C:/Qt/6.8.0/mingw_64/lib/cmake/Qt6ZlibPrivate/Qt6ZlibPrivateTargets.cmake \
 	C:/Qt/6.8.0/mingw_64/lib/cmake/Qt6ZlibPrivate/Qt6ZlibPrivateVersionlessAliasTargets.cmake \
 	C:/Users/justi/CLionProjects/3DViewer/CMakeLists.txt \
-	C:/Users/justi/CLionProjects/3DViewer/MainWindow.cpp \
-	C:/Users/justi/CLionProjects/3DViewer/MainWindow.h \
+	C:/Users/justi/CLionProjects/3DViewer/SWCParser.cpp \
+	C:/Users/justi/CLionProjects/3DViewer/SWCParser.h \
 	C:/Users/justi/CLionProjects/3DViewer/ViewerWidget.cpp \
 	C:/Users/justi/CLionProjects/3DViewer/ViewerWidget.h \
 	C:/Users/justi/CLionProjects/3DViewer/cmake-build-debug/3DViewer_autogen/moc_predefs.h \
