@@ -6,19 +6,12 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-# Set the correct Qt installation path (adjust this if your path is different)
+# Set the correct Qt installation path
 set(CMAKE_PREFIX_PATH "C:/Qt/6.8.0/mingw_64")
 
 # Find the necessary Qt components
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets OpenGLWidgets)
 find_package(OpenGL REQUIRED)  # Ensure OpenGL is found
-
-# Find Assimp
-find_package(Assimp REQUIRED)
-
-# Include directories
-include_directories(${ASSIMP_INCLUDE_DIRS})  # Assimp headers
-include_directories(${CMAKE_SOURCE_DIR}/lib)  # Add any custom libs in the future
 
 # Define the executable
 add_executable(3DViewer
@@ -29,14 +22,13 @@ add_executable(3DViewer
         SWCParser.h
 )
 
-# Link against the necessary Qt, OpenGL, and Assimp libraries
+# Link against the necessary Qt and OpenGL libraries
 target_link_libraries(3DViewer
         Qt6::Core
         Qt6::Gui
         Qt6::Widgets
         Qt6::OpenGLWidgets
         OpenGL::GL
-        ${ASSIMP_LIBRARIES}  # Link Assimp for STL loading
 )
 
 # Set the output directory for the executable

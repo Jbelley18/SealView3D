@@ -242,11 +242,7 @@
 		"C:/Qt/6.8.0/mingw_64/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake",
 		"C:/Program Files/JetBrains/CLion 2024.2.2/bin/cmake/win/x64/share/cmake-3.29/Modules/FindOpenGL.cmake",
 		"C:/Program Files/JetBrains/CLion 2024.2.2/bin/cmake/win/x64/share/cmake-3.29/Modules/FindPackageHandleStandardArgs.cmake",
-		"C:/Program Files/JetBrains/CLion 2024.2.2/bin/cmake/win/x64/share/cmake-3.29/Modules/FindPackageMessage.cmake",
-		"C:/Program Files (x86)/Assimp/lib/cmake/assimp-5.4/assimpConfigVersion.cmake",
-		"C:/Program Files (x86)/Assimp/lib/cmake/assimp-5.4/assimpConfig.cmake",
-		"C:/Program Files (x86)/Assimp/lib/cmake/assimp-5.4/assimpTargets.cmake",
-		"C:/Program Files (x86)/Assimp/lib/cmake/assimp-5.4/assimpTargets-noconfig.cmake"
+		"C:/Program Files/JetBrains/CLion 2024.2.2/bin/cmake/win/x64/share/cmake-3.29/Modules/FindPackageMessage.cmake"
 	],
 	"CMAKE_SOURCE_DIR" : "C:/Users/justi/CLionProjects/3DViewer",
 	"CROSS_CONFIG" : false,
@@ -294,8 +290,6 @@
 	],
 	"MOC_INCLUDES" : 
 	[
-		"C:/Users/justi/CLionProjects/3DViewer/Lib",
-		"C:/Program Files (x86)/Assimp/include",
 		"C:/Qt/6.8.0/mingw_64/include/QtCore",
 		"C:/Qt/6.8.0/mingw_64/include",
 		"C:/Qt/6.8.0/mingw_64/mkspecs/win32-g++",

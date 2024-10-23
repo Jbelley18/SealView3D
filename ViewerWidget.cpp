@@ -1,13 +1,11 @@
 #include "ViewerWidget.h"
 #include <iostream>
-#include <cmath> // For std::tan
+#include <cmath>  // For std::tan and other math functions
+#include <GL/gl.h>  // For OpenGL functions
 
 ViewerWidget::ViewerWidget(QWidget *parent)
     : QOpenGLWidget(parent), zoom(1.0f), rotationX(0.0f), rotationY(0.0f),
-      isRightMousePressed(false), panOffset(0.0f, 0.0f) {
-    // Load the STL model from the given path by default
-    loadModel("C:/Users/justi/Downloads/ArticulatedSealPup.stl");
-}
+      isRightMousePressed(false), panOffset(0.0f, 0.0f) {}
 
 void ViewerWidget::initializeGL() {
     initializeOpenGLFunctions();
@@ -33,6 +31,51 @@ void ViewerWidget::resizeGL(int w, int h) {
     glFrustum(left, right, bottom, top, nearPlane, farPlane);
 }
 
+// Custom function to draw the cylinder manually
+void ViewerWidget::drawCylinder(float baseRadius, float topRadius, float height, int slices) {
+    float angleStep = 2.0f * M_PI / slices;
+
+    // Draw the sides of the cylinder
+    glBegin(GL_TRIANGLE_STRIP);
+    for (int i = 0; i <= slices; ++i) {
+        float angle = i * angleStep;
+        float x = cos(angle);
+        float y = sin(angle);
+
+        // Bottom circle
+        glVertex3f(baseRadius * x, baseRadius * y, 0.0f);
+
+        // Top circle
+        glVertex3f(topRadius * x, topRadius * y, height);
+    }
+    glEnd();
+
+    // Draw the base of the cylinder
+    if (baseRadius > 0.0f) {
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex3f(0.0f, 0.0f, 0.0f);  // Center of the base
+        for (int i = 0; i <= slices; ++i) {
+            float angle = i * angleStep;
+            float x = cos(angle);
+            float y = sin(angle);
+            glVertex3f(baseRadius * x, baseRadius * y, 0.0f);
+        }
+        glEnd();
+    }
+
+    // Draw the top of the cylinder
+    if (topRadius > 0.0f) {
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex3f(0.0f, 0.0f, height);  // Center of the top
+        for (int i = 0; i <= slices; ++i) {
+            float angle = i * angleStep;
+            float x = cos(angle);
+            float y = sin(angle);
+            glVertex3f(topRadius * x, topRadius * y, height);
+        }
+        glEnd();
+    }
+}
 void ViewerWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -58,25 +101,38 @@ void ViewerWidget::paintGL() {
     glRotatef(rotationX, 1.0f, 0.0f, 0.0f);
     glRotatef(rotationY, 0.0f, 1.0f, 0.0f);
 
-    // Render the model or neuron based on what's loaded
     if (isNeuronLoaded) {
-        // Draw the neuron as lines between parent and child nodes
-        glBegin(GL_LINES);
+        // Iterate over each neuron node and draw a cylinder between the node and its parent
         for (const NeuronNode& node : neuronNodes) {
             if (node.parent != -1) {
                 NeuronNode parent = neuronNodes[node.parent - 1];
-                glVertex3f(node.x, node.y, node.z);
-                glVertex3f(parent.x, parent.y, parent.z);
+
+                // Calculate the height of the cylinder (distance between the parent and child node)
+                float dx = node.x - parent.x;
+                float dy = node.y - parent.y;
+                float dz = node.z - parent.z;
+                float height = sqrt(dx * dx + dy * dy + dz * dz);
+
+                // Calculate the direction of the cylinder to be drawn
+                float directionX = dx / height;
+                float directionY = dy / height;
+                float directionZ = dz / height;
+
+                // Move to the parent node's position
+                glPushMatrix();
+                glTranslatef(parent.x, parent.y, parent.z);
+
+                // Compute the rotation needed to align the cylinder with the child node
+                // You'll need more complex rotation logic here for 3D alignment (see below)
+                float angle = acos(directionZ) * 180.0f / M_PI;  // Rotate based on z-axis alignment
+                glRotatef(angle, -directionY, directionX, 0.0f);
+
+                // Draw the cylinder with varying radius from parent to child node
+                drawCylinder(parent.radius, node.radius, height, 20);
+
+                glPopMatrix();
             }
         }
-        glEnd();
-    } else {
-        // Draw the loaded STL model
-        glBegin(GL_TRIANGLES);
-        for (unsigned int i : indices) {
-            glVertex3f(vertices[i * 3], vertices[i * 3 + 1], vertices[i * 3 + 2]);
-        }
-        glEnd();
     }
 }
 
@@ -117,48 +173,5 @@ void ViewerWidget::mouseMoveEvent(QMouseEvent *event) {
 void ViewerWidget::mouseReleaseEvent(QMouseEvent *event) {
     if (event->button() == Qt::RightButton) {
         isRightMousePressed = false;
-    }
-}
-
-// Load model using Assimp
-void ViewerWidget::loadModel(const std::string& path) {
-    vertices.clear();
-    indices.clear();
-
-    Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
-
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        std::cerr << "Error: " << importer.GetErrorString() << std::endl;
-        return;
-    }
-
-    processNode(scene->mRootNode, scene);
-}
-
-void ViewerWidget::processNode(aiNode* node, const aiScene* scene) {
-    for (unsigned int i = 0; i < node->mNumMeshes; i++) {
-        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        drawMesh(mesh, scene);
-    }
-
-    for (unsigned int i = 0; i < node->mNumChildren; i++) {
-        processNode(node->mChildren[i], scene);
-    }
-}
-
-void ViewerWidget::drawMesh(aiMesh* mesh, const aiScene* scene) {
-    for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
-        aiVector3D position = mesh->mVertices[i];
-        vertices.push_back(position.x);
-        vertices.push_back(position.y);
-        vertices.push_back(position.z);
-    }
-
-    for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
-        aiFace face = mesh->mFaces[i];
-        for (unsigned int j = 0; j < face.mNumIndices; j++) {
-            indices.push_back(face.mIndices[j]);
-        }
     }
 }

@@ -1,35 +1,5 @@
 C:/Users/justi/CLionProjects/3DViewer/cmake-build-debug/3DViewer_autogen/EWIEGA46WW/moc_ViewerWidget.cpp: C:/Users/justi/CLionProjects/3DViewer/ViewerWidget.h \
   C:/Users/justi/CLionProjects/3DViewer/cmake-build-debug/3DViewer_autogen/moc_predefs.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/Compiler/poppack1.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/Compiler/pushpack1.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/Importer.hpp \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/MathFunctions.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/aabb.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/anim.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/camera.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/color4.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/color4.inl \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/config.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/defs.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/light.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/material.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/material.inl \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/matrix3x3.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/matrix3x3.inl \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/matrix4x4.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/matrix4x4.inl \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/mesh.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/metadata.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/postprocess.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/quaternion.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/quaternion.inl \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/scene.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/texture.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/types.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/vector2.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/vector2.inl \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/vector3.h \
-  C:/Program\ Files\ (x86)/Assimp/include/assimp/vector3.inl \
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/algorithm \
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/array \
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/atomic \
@@ -139,7 +109,6 @@ C:/Users/justi/CLionProjects/3DViewer/cmake-build-debug/3DViewer_autogen/EWIEGA4
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/uniform_int_dist.h \
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unique_ptr.h \
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unordered_map.h \
-  C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/unordered_set.h \
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/uses_allocator.h \
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/uses_allocator_args.h \
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/utility.h \
@@ -219,7 +188,6 @@ C:/Users/justi/CLionProjects/3DViewer/cmake-build-debug/3DViewer_autogen/EWIEGA4
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/type_traits \
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/typeinfo \
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/unordered_map \
-  C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/unordered_set \
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/utility \
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/variant \
   C:/Program\ Files/JetBrains/CLion\ 2024.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/vector \
