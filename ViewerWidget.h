@@ -30,11 +30,11 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
-    // Custom function to manually draw a cylinder
-    void drawCylinder(float baseRadius, float topRadius, float height, int slices);
+    // Custom function to manually draw a cylinder with color
+    void drawCylinder(float baseRadius, float topRadius, float height, int slices, const std::array<float, 3>& color);
 
-    // Custom function to manually draw a sphere for soma
-    void drawSphere(float radius, int slices, int stacks);
+    // Custom function to manually draw a sphere for soma with color
+    void drawSphere(float radius, int slices, int stacks, const std::array<float, 3>& color);
 
     // Variables to control model-view transformations
     float zoom;

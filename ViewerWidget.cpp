@@ -31,8 +31,10 @@ void ViewerWidget::resizeGL(int w, int h) {
     glFrustum(left, right, bottom, top, nearPlane, farPlane);
 }
 
-// Custom function to draw the cylinder
-void ViewerWidget::drawCylinder(float baseRadius, float topRadius, float height, int slices) {
+// Custom function to draw the cylinder with color
+void ViewerWidget::drawCylinder(float baseRadius, float topRadius, float height, int slices, const std::array<float, 3>& color) {
+    glColor3f(color[0], color[1], color[2]);  // Set color for the cylinder
+
     float angleStep = 2.0f * M_PI / slices;
 
     // Draw the sides of the cylinder
@@ -76,8 +78,10 @@ void ViewerWidget::drawCylinder(float baseRadius, float topRadius, float height,
     }
 }
 
-// Custom function to draw a sphere for the soma
-void ViewerWidget::drawSphere(float radius, int slices, int stacks) {
+// Custom function to draw a sphere for the soma with color
+void ViewerWidget::drawSphere(float radius, int slices, int stacks, const std::array<float, 3>& color) {
+    glColor3f(color[0], color[1], color[2]);  // Set color for the sphere
+
     for (int i = 0; i <= stacks; ++i) {
         float lat0 = M_PI * (-0.5 + (float)(i) / stacks); // Latitude
         float z0  = radius * sin(lat0); // Z coordinate
@@ -131,11 +135,11 @@ void ViewerWidget::paintGL() {
         bool somaDrawn = false; // Flag to check if soma has been drawn
 
         for (const NeuronNode& node : neuronNodes) {
-            if (node.type == SOMA_TYPE && !somaDrawn) {
+            if (node.type == NeuronType::SOMA_TYPE && !somaDrawn) {  // Reference to NeuronType::SOMA_TYPE
                 // Draw the soma only once
                 glPushMatrix();
                 glTranslatef(node.x, node.y, node.z);
-                drawSphere(node.radius, 20, 20);  // Draw the soma
+                drawSphere(node.radius, 20, 20, node.color);  // Pass color for the soma
                 glPopMatrix();
                 somaDrawn = true; // Set flag to true after drawing
             }
@@ -143,7 +147,7 @@ void ViewerWidget::paintGL() {
 
         // Draw axons or other parts
         for (const NeuronNode& node : neuronNodes) {
-            if (node.parent != -1 && node.type != SOMA_TYPE) {  // Exclude soma nodes
+            if (node.parent != -1 && node.type != NeuronType::SOMA_TYPE) {  // Exclude soma nodes, reference NeuronType::SOMA_TYPE
                 NeuronNode parent = neuronNodes[node.parent - 1];
 
                 // Calculate the height of the cylinder (distance between the parent and child node)
@@ -164,13 +168,14 @@ void ViewerWidget::paintGL() {
                 glRotatef(angle, -directionY, directionX, 0.0f);
 
                 // Draw the cylinder (axon)
-                drawCylinder(parent.radius, node.radius, height, 20);
+                drawCylinder(parent.radius, node.radius, height, 20, node.color);  // Pass color for axons/dendrites
 
                 glPopMatrix();
             }
         }
     }
 }
+
 
 void ViewerWidget::loadNeuron(const std::vector<NeuronNode>& nodes) {
     neuronNodes = nodes;
