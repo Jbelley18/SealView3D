@@ -6,6 +6,7 @@
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <vector>
+#include <array>  // For std::array
 #include "SWCParser.h"  // Include the SWCParser to handle neuron data
 
 class ViewerWidget : public QOpenGLWidget, protected QOpenGLFunctions {
@@ -31,6 +32,9 @@ protected:
 private:
     // Custom function to manually draw a cylinder
     void drawCylinder(float baseRadius, float topRadius, float height, int slices);
+
+    // Custom function to manually draw a sphere for soma
+    void drawSphere(float radius, int slices, int stacks);
 
     // Variables to control model-view transformations
     float zoom;

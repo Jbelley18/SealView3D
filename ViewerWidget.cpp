@@ -31,7 +31,7 @@ void ViewerWidget::resizeGL(int w, int h) {
     glFrustum(left, right, bottom, top, nearPlane, farPlane);
 }
 
-// Custom function to draw the cylinder manually
+// Custom function to draw the cylinder
 void ViewerWidget::drawCylinder(float baseRadius, float topRadius, float height, int slices) {
     float angleStep = 2.0f * M_PI / slices;
 
@@ -44,7 +44,6 @@ void ViewerWidget::drawCylinder(float baseRadius, float topRadius, float height,
 
         // Bottom circle
         glVertex3f(baseRadius * x, baseRadius * y, 0.0f);
-
         // Top circle
         glVertex3f(topRadius * x, topRadius * y, height);
     }
@@ -76,6 +75,33 @@ void ViewerWidget::drawCylinder(float baseRadius, float topRadius, float height,
         glEnd();
     }
 }
+
+// Custom function to draw a sphere for the soma
+void ViewerWidget::drawSphere(float radius, int slices, int stacks) {
+    for (int i = 0; i <= stacks; ++i) {
+        float lat0 = M_PI * (-0.5 + (float)(i) / stacks); // Latitude
+        float z0  = radius * sin(lat0); // Z coordinate
+        float r0  = radius * cos(lat0); // Radius at latitude
+
+        float lat1 = M_PI * (-0.5 + (float)(i + 1) / stacks);
+        float z1 = radius * sin(lat1);
+        float r1 = radius * cos(lat1);
+
+        glBegin(GL_QUAD_STRIP);
+        for (int j = 0; j <= slices; ++j) {
+            float lng = 2 * M_PI * (float)(j) / slices; // Longitude
+            float x = cos(lng); // X coordinate
+            float y = sin(lng);
+
+            glNormal3f(x * r0, y * r0, z0); // Normal
+            glVertex3f(x * r0, y * r0, z0); // Vertex at latitude 0
+            glNormal3f(x * r1, y * r1, z1); // Normal
+            glVertex3f(x * r1, y * r1, z1); // Vertex at latitude 1
+        }
+        glEnd();
+    }
+}
+
 void ViewerWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -102,9 +128,22 @@ void ViewerWidget::paintGL() {
     glRotatef(rotationY, 0.0f, 1.0f, 0.0f);
 
     if (isNeuronLoaded) {
-        // Iterate over each neuron node and draw a cylinder between the node and its parent
+        bool somaDrawn = false; // Flag to check if soma has been drawn
+
         for (const NeuronNode& node : neuronNodes) {
-            if (node.parent != -1) {
+            if (node.type == SOMA_TYPE && !somaDrawn) {
+                // Draw the soma only once
+                glPushMatrix();
+                glTranslatef(node.x, node.y, node.z);
+                drawSphere(node.radius, 20, 20);  // Draw the soma
+                glPopMatrix();
+                somaDrawn = true; // Set flag to true after drawing
+            }
+        }
+
+        // Draw axons or other parts
+        for (const NeuronNode& node : neuronNodes) {
+            if (node.parent != -1 && node.type != SOMA_TYPE) {  // Exclude soma nodes
                 NeuronNode parent = neuronNodes[node.parent - 1];
 
                 // Calculate the height of the cylinder (distance between the parent and child node)
@@ -113,21 +152,18 @@ void ViewerWidget::paintGL() {
                 float dz = node.z - parent.z;
                 float height = sqrt(dx * dx + dy * dy + dz * dz);
 
-                // Calculate the direction of the cylinder to be drawn
-                float directionX = dx / height;
-                float directionY = dy / height;
-                float directionZ = dz / height;
-
                 // Move to the parent node's position
                 glPushMatrix();
                 glTranslatef(parent.x, parent.y, parent.z);
 
                 // Compute the rotation needed to align the cylinder with the child node
-                // You'll need more complex rotation logic here for 3D alignment (see below)
-                float angle = acos(directionZ) * 180.0f / M_PI;  // Rotate based on z-axis alignment
+                float directionX = dx / height;
+                float directionY = dy / height;
+                float directionZ = dz / height;
+                float angle = acos(directionZ) * 180.0f / M_PI;
                 glRotatef(angle, -directionY, directionX, 0.0f);
 
-                // Draw the cylinder with varying radius from parent to child node
+                // Draw the cylinder (axon)
                 drawCylinder(parent.radius, node.radius, height, 20);
 
                 glPopMatrix();

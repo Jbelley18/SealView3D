@@ -12,6 +12,9 @@ struct NeuronNode {
     int parent;
 };
 
+// Define soma type constant
+const int SOMA_TYPE = 1;  // Replace 1 with the actual type ID for soma if different
+
 class SWCParser {
 public:
     SWCParser(const std::string& filePath);    // Constructor with file path
