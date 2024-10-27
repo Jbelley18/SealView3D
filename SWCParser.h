@@ -4,16 +4,26 @@
 #include <vector>
 #include <string>
 
+// Enum for Neuron types (instead of using raw integers)
+enum NeuronType {
+    SOMA = 1,
+    AXON = 2,
+    DENDRITE = 3,
+    APICAL_DENDRITE = 4,
+    CUSTOM_TYPE_5 = 5,
+    CUSTOM_TYPE_6 = 6,
+    CUSTOM_TYPE_7 = 7,   // Custom type for nodes 4-26
+    CUSTOM_TYPE = -1
+};
+
+
 // Define a struct for NeuronNode, representing each node in the neuron
 struct NeuronNode {
     int id;
-    int type;
+    NeuronType type;  // Use enum for neuron type
     float x, y, z, radius;
     int parent;
 };
-
-// Define soma type constant
-const int SOMA_TYPE = 1;  // Replace 1 with the actual type ID for soma if different
 
 class SWCParser {
 public:

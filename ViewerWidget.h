@@ -15,13 +15,14 @@ class ViewerWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 public:
     explicit ViewerWidget(QWidget *parent = nullptr);
 
-    // Neuron loading method
-    void loadNeuron(const std::vector<NeuronNode>& nodes);    // For loading neuron data from SWC files
+    // Method for loading neuron data from SWC files
+    void loadNeuron(const std::vector<NeuronNode>& nodes);
 
 protected:
+    // OpenGL initialization and resizing
     void initializeGL() override;
     void resizeGL(int w, int h) override;
-    void paintGL() override;
+    void paintGL() override;  // This method will also handle color assignment based on neuron type
 
     // Event handling for user interaction
     void wheelEvent(QWheelEvent *event) override;
@@ -30,10 +31,10 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
-    // Custom function to manually draw a cylinder
+    // Custom function to manually draw a cylinder (for neuron branches)
     void drawCylinder(float baseRadius, float topRadius, float height, int slices);
 
-    // Custom function to manually draw a sphere for soma
+    // Custom function to manually draw a sphere (for neuron soma)
     void drawSphere(float radius, int slices, int stacks);
 
     // Variables to control model-view transformations

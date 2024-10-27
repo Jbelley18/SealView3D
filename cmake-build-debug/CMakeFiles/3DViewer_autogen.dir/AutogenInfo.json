@@ -251,6 +251,12 @@
 	"HEADERS" : 
 	[
 		[
+			"C:/Users/justi/CLionProjects/3DViewer/ControlPanel.h",
+			"MU",
+			"EWIEGA46WW/moc_ControlPanel.cpp",
+			null
+		],
+		[
 			"C:/Users/justi/CLionProjects/3DViewer/SWCParser.h",
 			"MU",
 			"EWIEGA46WW/moc_SWCParser.cpp",
@@ -340,6 +346,7 @@
 	"SETTINGS_FILE" : "C:/Users/justi/CLionProjects/3DViewer/cmake-build-debug/CMakeFiles/3DViewer_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
+		[ "C:/Users/justi/CLionProjects/3DViewer/ControlPanel.cpp", "MU", null ],
 		[ "C:/Users/justi/CLionProjects/3DViewer/SWCParser.cpp", "MU", null ],
 		[ "C:/Users/justi/CLionProjects/3DViewer/ViewerWidget.cpp", "MU", null ],
 		[ "C:/Users/justi/CLionProjects/3DViewer/main.cpp", "MU", null ]

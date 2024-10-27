@@ -20,6 +20,8 @@ add_executable(3DViewer
         ViewerWidget.h
         SWCParser.cpp
         SWCParser.h
+        ControlPanel.cpp
+        ControlPanel.h
 )
 
 # Link against the necessary Qt and OpenGL libraries

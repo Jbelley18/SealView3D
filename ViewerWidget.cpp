@@ -131,7 +131,30 @@ void ViewerWidget::paintGL() {
         bool somaDrawn = false; // Flag to check if soma has been drawn
 
         for (const NeuronNode& node : neuronNodes) {
-            if (node.type == SOMA_TYPE && !somaDrawn) {
+            // Set color based on neuron type
+            switch (node.type) {
+                case SOMA:
+                    glColor3f(1.0f, 0.0f, 0.0f);  // Red for soma
+                    break;
+                case AXON:
+                    glColor3f(0.0f, 0.0f, 1.0f);  // Blue for axon
+                    break;
+                case DENDRITE:
+                    glColor3f(0.0f, 1.0f, 0.0f);  // Green for dendrites
+                    break;
+                case APICAL_DENDRITE:
+                    glColor3f(1.0f, 1.0f, 0.0f);  // Yellow for apical dendrite
+                    break;
+                case CUSTOM_TYPE_7:
+                    glColor3f(1.0f, 0.5f, 0.0f);  // Orange for custom type 7
+                break;
+
+                default:
+                    glColor3f(1.0f, 1.0f, 1.0f);  // White for unknown types
+                    break;
+            }
+
+            if (node.type == SOMA && !somaDrawn) {
                 // Draw the soma only once
                 glPushMatrix();
                 glTranslatef(node.x, node.y, node.z);
@@ -141,10 +164,30 @@ void ViewerWidget::paintGL() {
             }
         }
 
-        // Draw axons or other parts
+        // Draw axons, dendrites, or other parts
         for (const NeuronNode& node : neuronNodes) {
-            if (node.parent != -1 && node.type != SOMA_TYPE) {  // Exclude soma nodes
+            if (node.parent != -1 && node.type != SOMA) {  // Exclude soma nodes
                 NeuronNode parent = neuronNodes[node.parent - 1];
+
+                // Set color again based on type
+                switch (node.type) {
+                    case AXON:
+                        glColor3f(0.0f, 0.0f, 1.0f);  // Blue for axon
+                        break;
+                    case DENDRITE:
+                        glColor3f(0.0f, 1.0f, 0.0f);  // Green for dendrites
+                        break;
+                    case APICAL_DENDRITE:
+                        glColor3f(1.0f, 1.0f, 0.0f);  // Yellow for apical dendrites
+                        break;
+                    case CUSTOM_TYPE_7:
+                        glColor3f(1.0f, 0.5f, 0.0f);  // Orange for custom type 7
+                    break;
+
+                    default:
+                        glColor3f(1.0f, 1.0f, 1.0f);  // White for unknown types
+                        break;
+                }
 
                 // Calculate the height of the cylinder (distance between the parent and child node)
                 float dx = node.x - parent.x;
@@ -163,7 +206,7 @@ void ViewerWidget::paintGL() {
                 float angle = acos(directionZ) * 180.0f / M_PI;
                 glRotatef(angle, -directionY, directionX, 0.0f);
 
-                // Draw the cylinder (axon)
+                // Draw the cylinder (axon or dendrite)
                 drawCylinder(parent.radius, node.radius, height, 20);
 
                 glPopMatrix();
@@ -177,6 +220,8 @@ void ViewerWidget::loadNeuron(const std::vector<NeuronNode>& nodes) {
     isNeuronLoaded = true;
     update();  // Trigger a repaint
 }
+
+// Mouse Handling or Movement.
 
 void ViewerWidget::wheelEvent(QWheelEvent *event) {
     zoom *= (event->angleDelta().y() > 0) ? 1.1f : 0.9f;

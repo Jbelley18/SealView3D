@@ -1,0 +1,32 @@
+# CMake build and debug directories
+/build/
+/cmake-build-debug/
+/cmake-build-release/
+
+# CMake generated files
+CMakeFiles
+CMakeCache.txt
+*.cmake
+
+# Qt specific
+*.pro.user
+*.qmake.stash
+*.pro.user.*
+
+# IDE-specific folders (optional, depending on your IDE)
+.idea/
+.vscode/
+
+# Compiled binary files
+*.exe
+*.out
+*.app
+*.dll
+*.so
+*.dylib
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.DS_Store

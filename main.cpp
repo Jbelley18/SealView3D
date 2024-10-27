@@ -1,11 +1,11 @@
 #include <QApplication>
 #include <QScreen>
-#include "ViewerWidget.h"
-#include "SWCParser.h"
-#include <iostream>
-#include <QPushButton>
-#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QFileDialog>
+#include <QShortcut>
+#include "ViewerWidget.h"
+#include "ControlPanel.h"
+#include "SWCParser.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
@@ -20,24 +20,24 @@ int main(int argc, char *argv[]) {
     int windowWidth = static_cast<int>(screenWidth * 0.8);
     int windowHeight = static_cast<int>(screenHeight * 0.8);
 
-    // Create the ViewerWidget instance
+    // Create the ViewerWidget instance (3D viewer)
     ViewerWidget *viewerWidget = new ViewerWidget;
 
-    // Create a "Load File" button
-    QPushButton *loadFileButton = new QPushButton("Load SWC File");
+    // Create the ControlPanel instance (UI controls)
+    ControlPanel *controlPanel = new ControlPanel;
 
-    // Create a vertical layout
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(loadFileButton);   // Add the button at the top
-    layout->addWidget(viewerWidget);     // Add the ViewerWidget below the button
+    // Create a horizontal layout to place ControlPanel and ViewerWidget side by side
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout->addWidget(controlPanel);   // Add ControlPanel on the left
+    mainLayout->addWidget(viewerWidget);   // Add ViewerWidget on the right
 
     // Create a container widget to hold the layout
     QWidget window;
-    window.setLayout(layout);
+    window.setLayout(mainLayout);
     window.resize(windowWidth, windowHeight);
 
-    // Connect the button click event to the file loading logic
-    QObject::connect(loadFileButton, &QPushButton::clicked, [&](){
+    // Connect the ControlPanel's load button signal to the ViewerWidget's loadNeuron function
+    QObject::connect(controlPanel, &ControlPanel::loadSWCFileRequested, [&]() {
         QString filePath = QFileDialog::getOpenFileName(&window, "Open SWC File", "", "SWC Files (*.swc);;All Files (*)");
         if (!filePath.isEmpty()) {
             std::string filePathStd = filePath.toStdString();
@@ -49,9 +49,14 @@ int main(int argc, char *argv[]) {
         }
     });
 
-    // Show the window with the layout
+    // Add a keyboard shortcut for toggling ControlPanel visibility with the T key
+    QShortcut *toggleShortcut = new QShortcut(QKeySequence("T"), &window);
+    QObject::connect(toggleShortcut, &QShortcut::activated, [&]() {
+        controlPanel->setVisible(!controlPanel->isVisible());
+    });
+
+    // Show the main window with the layout
     window.show();
 
     return app.exec();
 }
-
