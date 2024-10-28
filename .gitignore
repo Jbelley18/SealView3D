@@ -8,6 +8,9 @@ CMakeFiles
 CMakeCache.txt
 *.cmake
 
+3DViewer/assimp/
+3DViewer/Lib/MorphIO-master/
+
 # Qt specific
 *.pro.user
 *.qmake.stash

@@ -18,6 +18,9 @@ public:
     // Method for loading neuron data from SWC files
     void loadNeuron(const std::vector<NeuronNode>& nodes);
 
+    public slots:
+        void toggleWireframeMode();  // Slot to toggle wireframe mode
+
 protected:
     // OpenGL initialization and resizing
     void initializeGL() override;
@@ -48,6 +51,9 @@ private:
     // Neuron data
     std::vector<NeuronNode> neuronNodes;    // Stores neuron nodes parsed from SWC
     bool isNeuronLoaded = false;            // Flag to know whether neuron data is loaded
+
+    // Wireframe mode flag
+    bool isWireframeMode = false;
 };
 
 #endif // VIEWERWIDGET_H

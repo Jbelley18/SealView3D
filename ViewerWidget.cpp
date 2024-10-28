@@ -1,11 +1,11 @@
 #include "ViewerWidget.h"
 #include <iostream>
-#include <cmath>  // For std::tan and other math functions
-#include <GL/gl.h>  // For OpenGL functions
+#include <cmath>
+#include <GL/gl.h>
 
 ViewerWidget::ViewerWidget(QWidget *parent)
     : QOpenGLWidget(parent), zoom(1.0f), rotationX(0.0f), rotationY(0.0f),
-      isRightMousePressed(false), panOffset(0.0f, 0.0f) {}
+      isRightMousePressed(false), panOffset(0.0f, 0.0f), isWireframeMode(false) {}
 
 void ViewerWidget::initializeGL() {
     initializeOpenGLFunctions();
@@ -29,6 +29,167 @@ void ViewerWidget::resizeGL(int w, int h) {
     float left = -right;
 
     glFrustum(left, right, bottom, top, nearPlane, farPlane);
+}
+
+// Slot to toggle wireframe mode
+void ViewerWidget::toggleWireframeMode() {
+    isWireframeMode = !isWireframeMode;
+    update();  // Trigger a repaint
+}
+
+void ViewerWidget::paintGL() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Toggle between wireframe and solid rendering
+    if (isWireframeMode) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Wireframe mode
+    } else {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Solid mode
+    }
+
+    // Set up projection matrix
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    float aspectRatio = static_cast<float>(width()) / height();
+    float fov = 60.0f;
+    float nearPlane = 0.1f;
+    float farPlane = 1000.0f;
+
+    float top = nearPlane * std::tan(fov * M_PI / 360.0);
+    float bottom = -top;
+    float right = top * aspectRatio;
+    float left = -right;
+
+    glFrustum(left, right, bottom, top, nearPlane, farPlane);
+
+    // Set up model-view matrix
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(panOffset.x(), panOffset.y(), -20.0f * zoom);
+    glRotatef(rotationX, 1.0f, 0.0f, 0.0f);
+    glRotatef(rotationY, 0.0f, 1.0f, 0.0f);
+
+    if (isNeuronLoaded) {
+        bool somaDrawn = false;
+
+        for (const NeuronNode& node : neuronNodes) {
+            switch (node.type) {
+                case SOMA:
+                    glColor3f(1.0f, 0.0f, 0.0f);
+                    break;
+                case AXON:
+                    glColor3f(0.0f, 0.0f, 1.0f);
+                    break;
+                case DENDRITE:
+                    glColor3f(0.0f, 1.0f, 0.0f);
+                    break;
+                case APICAL_DENDRITE:
+                    glColor3f(1.0f, 1.0f, 0.0f);
+                    break;
+                case CUSTOM_TYPE_7:
+                    glColor3f(1.0f, 0.5f, 0.0f);
+                    break;
+                default:
+                    glColor3f(1.0f, 1.0f, 1.0f);
+                    break;
+            }
+
+            if (node.type == SOMA && !somaDrawn) {
+                glPushMatrix();
+                glTranslatef(node.x, node.y, node.z);
+                drawSphere(node.radius, 20, 20);
+                glPopMatrix();
+                somaDrawn = true;
+            }
+        }
+
+        for (const NeuronNode& node : neuronNodes) {
+            if (node.parent != -1 && node.type != SOMA) {
+                NeuronNode parent = neuronNodes[node.parent - 1];
+
+                switch (node.type) {
+                    case AXON:
+                        glColor3f(0.0f, 0.0f, 1.0f);
+                        break;
+                    case DENDRITE:
+                        glColor3f(0.0f, 1.0f, 0.0f);
+                        break;
+                    case APICAL_DENDRITE:
+                        glColor3f(1.0f, 1.0f, 0.0f);
+                        break;
+                    case CUSTOM_TYPE_7:
+                        glColor3f(1.0f, 0.5f, 0.0f);
+                        break;
+                    default:
+                        glColor3f(1.0f, 1.0f, 1.0f);
+                        break;
+                }
+
+                float dx = node.x - parent.x;
+                float dy = node.y - parent.y;
+                float dz = node.z - parent.z;
+                float height = sqrt(dx * dx + dy * dy + dz * dz);
+
+                glPushMatrix();
+                glTranslatef(parent.x, parent.y, parent.z);
+
+                float directionX = dx / height;
+                float directionY = dy / height;
+                float directionZ = dz / height;
+                float angle = acos(directionZ) * 180.0f / M_PI;
+                glRotatef(angle, -directionY, directionX, 0.0f);
+
+                drawCylinder(parent.radius, node.radius, height, 20);
+                glPopMatrix();
+            }
+        }
+    }
+
+    // Reset to fill mode for other OpenGL content
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
+void ViewerWidget::loadNeuron(const std::vector<NeuronNode>& nodes) {
+    neuronNodes = nodes;
+    isNeuronLoaded = true;
+    update();
+}
+
+
+// Mouse Handling or Movement.
+
+void ViewerWidget::wheelEvent(QWheelEvent *event) {
+    zoom *= (event->angleDelta().y() > 0) ? 1.1f : 0.9f;
+    update();
+}
+
+void ViewerWidget::mousePressEvent(QMouseEvent *event) {
+    lastMousePosition = event->position();  // Capture current position
+    if (event->button() == Qt::RightButton) {
+        isRightMousePressed = true;
+    }
+}
+
+void ViewerWidget::mouseMoveEvent(QMouseEvent *event) {
+    QPointF currentMousePosition = event->position();
+    float dx = currentMousePosition.x() - lastMousePosition.x();
+    float dy = currentMousePosition.y() - lastMousePosition.y();
+
+    if (event->buttons() & Qt::LeftButton) {
+        rotationX += dy;
+        rotationY += dx;
+    } else if (isRightMousePressed) {
+        panOffset += QPointF(dx * 0.01f, -dy * 0.01f);  // Adjust for panning sensitivity
+    }
+
+    lastMousePosition = currentMousePosition;
+    update();
+}
+
+void ViewerWidget::mouseReleaseEvent(QMouseEvent *event) {
+    if (event->button() == Qt::RightButton) {
+        isRightMousePressed = false;
+    }
 }
 
 // Custom function to draw the cylinder
@@ -99,160 +260,5 @@ void ViewerWidget::drawSphere(float radius, int slices, int stacks) {
             glVertex3f(x * r1, y * r1, z1); // Vertex at latitude 1
         }
         glEnd();
-    }
-}
-
-void ViewerWidget::paintGL() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // Set up projection matrix
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    float aspectRatio = static_cast<float>(width()) / height();
-    float fov = 60.0f;
-    float nearPlane = 0.1f;
-    float farPlane = 1000.0f;
-
-    float top = nearPlane * std::tan(fov * M_PI / 360.0);
-    float bottom = -top;
-    float right = top * aspectRatio;
-    float left = -right;
-
-    glFrustum(left, right, bottom, top, nearPlane, farPlane);
-
-    // Set up model-view matrix
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(panOffset.x(), panOffset.y(), -20.0f * zoom);
-    glRotatef(rotationX, 1.0f, 0.0f, 0.0f);
-    glRotatef(rotationY, 0.0f, 1.0f, 0.0f);
-
-    if (isNeuronLoaded) {
-        bool somaDrawn = false; // Flag to check if soma has been drawn
-
-        for (const NeuronNode& node : neuronNodes) {
-            // Set color based on neuron type
-            switch (node.type) {
-                case SOMA:
-                    glColor3f(1.0f, 0.0f, 0.0f);  // Red for soma
-                    break;
-                case AXON:
-                    glColor3f(0.0f, 0.0f, 1.0f);  // Blue for axon
-                    break;
-                case DENDRITE:
-                    glColor3f(0.0f, 1.0f, 0.0f);  // Green for dendrites
-                    break;
-                case APICAL_DENDRITE:
-                    glColor3f(1.0f, 1.0f, 0.0f);  // Yellow for apical dendrite
-                    break;
-                case CUSTOM_TYPE_7:
-                    glColor3f(1.0f, 0.5f, 0.0f);  // Orange for custom type 7
-                break;
-
-                default:
-                    glColor3f(1.0f, 1.0f, 1.0f);  // White for unknown types
-                    break;
-            }
-
-            if (node.type == SOMA && !somaDrawn) {
-                // Draw the soma only once
-                glPushMatrix();
-                glTranslatef(node.x, node.y, node.z);
-                drawSphere(node.radius, 20, 20);  // Draw the soma
-                glPopMatrix();
-                somaDrawn = true; // Set flag to true after drawing
-            }
-        }
-
-        // Draw axons, dendrites, or other parts
-        for (const NeuronNode& node : neuronNodes) {
-            if (node.parent != -1 && node.type != SOMA) {  // Exclude soma nodes
-                NeuronNode parent = neuronNodes[node.parent - 1];
-
-                // Set color again based on type
-                switch (node.type) {
-                    case AXON:
-                        glColor3f(0.0f, 0.0f, 1.0f);  // Blue for axon
-                        break;
-                    case DENDRITE:
-                        glColor3f(0.0f, 1.0f, 0.0f);  // Green for dendrites
-                        break;
-                    case APICAL_DENDRITE:
-                        glColor3f(1.0f, 1.0f, 0.0f);  // Yellow for apical dendrites
-                        break;
-                    case CUSTOM_TYPE_7:
-                        glColor3f(1.0f, 0.5f, 0.0f);  // Orange for custom type 7
-                    break;
-
-                    default:
-                        glColor3f(1.0f, 1.0f, 1.0f);  // White for unknown types
-                        break;
-                }
-
-                // Calculate the height of the cylinder (distance between the parent and child node)
-                float dx = node.x - parent.x;
-                float dy = node.y - parent.y;
-                float dz = node.z - parent.z;
-                float height = sqrt(dx * dx + dy * dy + dz * dz);
-
-                // Move to the parent node's position
-                glPushMatrix();
-                glTranslatef(parent.x, parent.y, parent.z);
-
-                // Compute the rotation needed to align the cylinder with the child node
-                float directionX = dx / height;
-                float directionY = dy / height;
-                float directionZ = dz / height;
-                float angle = acos(directionZ) * 180.0f / M_PI;
-                glRotatef(angle, -directionY, directionX, 0.0f);
-
-                // Draw the cylinder (axon or dendrite)
-                drawCylinder(parent.radius, node.radius, height, 20);
-
-                glPopMatrix();
-            }
-        }
-    }
-}
-
-void ViewerWidget::loadNeuron(const std::vector<NeuronNode>& nodes) {
-    neuronNodes = nodes;
-    isNeuronLoaded = true;
-    update();  // Trigger a repaint
-}
-
-// Mouse Handling or Movement.
-
-void ViewerWidget::wheelEvent(QWheelEvent *event) {
-    zoom *= (event->angleDelta().y() > 0) ? 1.1f : 0.9f;
-    update();
-}
-
-void ViewerWidget::mousePressEvent(QMouseEvent *event) {
-    lastMousePosition = event->position();  // Capture current position
-    if (event->button() == Qt::RightButton) {
-        isRightMousePressed = true;
-    }
-}
-
-void ViewerWidget::mouseMoveEvent(QMouseEvent *event) {
-    QPointF currentMousePosition = event->position();
-    float dx = currentMousePosition.x() - lastMousePosition.x();
-    float dy = currentMousePosition.y() - lastMousePosition.y();
-
-    if (event->buttons() & Qt::LeftButton) {
-        rotationX += dy;
-        rotationY += dx;
-    } else if (isRightMousePressed) {
-        panOffset += QPointF(dx * 0.01f, -dy * 0.01f);  // Adjust for panning sensitivity
-    }
-
-    lastMousePosition = currentMousePosition;
-    update();
-}
-
-void ViewerWidget::mouseReleaseEvent(QMouseEvent *event) {
-    if (event->button() == Qt::RightButton) {
-        isRightMousePressed = false;
     }
 }

@@ -1,8 +1,7 @@
-// ControlPanel.cpp
-
 #include "ControlPanel.h"
 #include <QFileDialog>
 #include <QHeaderView>
+#include <QTextStream>
 
 ControlPanel::ControlPanel(QWidget *parent) : QWidget(parent) {
     setupUI();
@@ -14,6 +13,7 @@ void ControlPanel::setupUI() {
     loadSWCButton = new QPushButton("Load SWC File", this);
     toggleVisibilityButton = new QPushButton("Toggle Viewer", this);
     exportButton = new QPushButton("Export Data", this);
+    wireframeButton = new QPushButton("Toggle Wireframe", this);  // New wireframe toggle button
 
     dataTable = new QTableWidget(this);
     dataTable->setColumnCount(3); // Example: Branch Length, Radius, Parent Node
@@ -26,6 +26,7 @@ void ControlPanel::setupUI() {
     layout->addWidget(dataTable);
     layout->addWidget(toggleVisibilityButton);
     layout->addWidget(exportButton);
+    layout->addWidget(wireframeButton);  // Add wireframe button to layout
     setLayout(layout);
 }
 
@@ -37,10 +38,12 @@ void ControlPanel::setupConnections() {
     connect(exportButton, &QPushButton::clicked, this, &ControlPanel::exportData);
 }
 
+// Implementation for loading SWC file
 void ControlPanel::onLoadSWCFile() {
-    emit loadSWCFileRequested(); // Signal that ViewerWidget can connect to
+    emit loadSWCFileRequested();  // Emit signal for SWC file loading
 }
 
+// Implementation for exporting data to a file (e.g., CSV)
 void ControlPanel::exportData() {
     QString filePath = QFileDialog::getSaveFileName(this, "Save Data", "", "CSV Files (*.csv);;All Files (*)");
     if (!filePath.isEmpty()) {
@@ -61,6 +64,3 @@ void ControlPanel::exportData() {
         }
     }
 }
-
-    // Implementation for exporting the data to a file (e.g., CSV)
-

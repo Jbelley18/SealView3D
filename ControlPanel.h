@@ -13,6 +13,7 @@ class ControlPanel : public QWidget {
 
 public:
     explicit ControlPanel(QWidget *parent = nullptr);
+    QPushButton *wireframeButton;
 
     signals:
         void loadSWCFileRequested();
@@ -25,6 +26,7 @@ private:
     QTableWidget *dataTable;
     QPushButton *toggleVisibilityButton;
     QPushButton *exportButton;
+
 
     void setupUI();
     void setupConnections();

@@ -1,6 +1,6 @@
 #include <QApplication>
 #include <QScreen>
-#include <QHBoxLayout>
+#include <QSplitter>
 #include <QFileDialog>
 #include <QShortcut>
 #include "ViewerWidget.h"
@@ -25,14 +25,19 @@ int main(int argc, char *argv[]) {
 
     // Create the ControlPanel instance (UI controls)
     ControlPanel *controlPanel = new ControlPanel;
+    controlPanel->setMinimumWidth(200);     // Optional: Minimum width
+    controlPanel->setMaximumWidth(600);     // Optional: Maximum width (set to a wider limit)
 
-    // Create a horizontal layout to place ControlPanel and ViewerWidget side by side
-    QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addWidget(controlPanel);   // Add ControlPanel on the left
-    mainLayout->addWidget(viewerWidget);   // Add ViewerWidget on the right
+    // Create a QSplitter to allow resizing between ControlPanel and ViewerWidget
+    QSplitter *splitter = new QSplitter;
+    splitter->addWidget(controlPanel);
+    splitter->addWidget(viewerWidget);
+    splitter->setSizes({250, windowWidth - 250});  // Initial proportions
 
-    // Create a container widget to hold the layout
+    // Create a container widget to hold the splitter in a layout
     QWidget window;
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout->addWidget(splitter);
     window.setLayout(mainLayout);
     window.resize(windowWidth, windowHeight);
 
@@ -49,10 +54,20 @@ int main(int argc, char *argv[]) {
         }
     });
 
+    // Connect the wireframe toggle button to the ViewerWidget's toggleWireframeMode slot
+    QObject::connect(controlPanel->wireframeButton, &QPushButton::clicked, viewerWidget, &ViewerWidget::toggleWireframeMode);
+
     // Add a keyboard shortcut for toggling ControlPanel visibility with the T key
+    int lastWidth = controlPanel->width();
     QShortcut *toggleShortcut = new QShortcut(QKeySequence("T"), &window);
     QObject::connect(toggleShortcut, &QShortcut::activated, [&]() {
-        controlPanel->setVisible(!controlPanel->isVisible());
+        if (controlPanel->isVisible()) {
+            lastWidth = controlPanel->width();
+            controlPanel->hide();
+        } else {
+            controlPanel->show();
+            controlPanel->setFixedWidth(lastWidth);  // Restore the last known width
+        }
     });
 
     // Show the main window with the layout
